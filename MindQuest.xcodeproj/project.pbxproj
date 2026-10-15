@@ -7,11 +7,11 @@
 	objects = {
 
 /* Begin PBXFileReference section */
-		71097E143080D3B200A929DA /* MindQuest.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MindQuest.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		71097E143080D3B200A929DA /* MindQuest.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; name = MindQuest.app; path = "/Users/risinisenara/Desktop/MADD IOS/PART B/MindQuest/build/Debug-appletvos/MindQuest.app"; sourceTree = "<absolute>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
-		71097E163080D3B200A929DA /* MindQuest */ = {
+		71097E303080D5AF00A929DA /* MindQuest */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			path = MindQuest;
 			sourceTree = "<group>";
@@ -30,17 +30,8 @@
 		71097E0B3080D3B200A929DA = {
 			isa = PBXGroup;
 			children = (
-				71097E163080D3B200A929DA /* MindQuest */,
-				71097E153080D3B200A929DA /* Products */,
+				71097E303080D5AF00A929DA /* MindQuest */,
 			);
-			sourceTree = "<group>";
-		};
-		71097E153080D3B200A929DA /* Products */ = {
-			isa = PBXGroup;
-			children = (
-				71097E143080D3B200A929DA /* MindQuest.app */,
-			);
-			name = Products;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -57,7 +48,7 @@
 			buildRules = (
 			);
 			fileSystemSynchronizedGroups = (
-				71097E163080D3B200A929DA /* MindQuest */,
+				71097E303080D5AF00A929DA /* MindQuest */,
 			);
 			name = MindQuest;
 			productName = MindQuest;
@@ -89,7 +80,7 @@
 			mainGroup = 71097E0B3080D3B200A929DA;
 			minimizedProjectReferenceProxies = 1;
 			preferredProjectObjectVersion = 77;
-			productRefGroup = 71097E153080D3B200A929DA /* Products */;
+			productRefGroup = 71097E0B3080D3B200A929DA;
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
