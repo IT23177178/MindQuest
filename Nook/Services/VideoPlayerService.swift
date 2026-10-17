@@ -38,14 +38,8 @@ final class VideoPlayerService {
             forKey: progressKey
         )
 
-        if savedPosition > 0 {
-            newPlayer.seek(
-                to: CMTime(
-                    seconds: savedPosition,
-                    preferredTimescale: 600
-                )
-            )
-        }
+        // Do not seek yet. Let the viewer choose whether to resume
+        // or start from the beginning.
 
         addTimeObserver(to: newPlayer)
         return true
@@ -58,6 +52,30 @@ final class VideoPlayerService {
     func pause() {
         player?.pause()
         saveCurrentPosition()
+    }
+
+    func resumeFromSavedPosition(
+        completion: @MainActor @escaping () -> Void
+    ) {
+        guard let player else {
+            completion()
+            return
+        }
+
+        let time = CMTime(
+            seconds: savedPosition,
+            preferredTimescale: 600
+        )
+
+        player.seek(
+            to: time,
+            toleranceBefore: .zero,
+            toleranceAfter: .zero
+        ) { _ in
+            Task { @MainActor in
+                completion()
+            }
+        }
     }
 
     func startFromBeginning() {

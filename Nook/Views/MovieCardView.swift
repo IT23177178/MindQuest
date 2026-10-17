@@ -4,8 +4,8 @@ import SwiftUI
 struct MovieCardView: View {
     let movie: Movie
 
-    private let posterWidth: CGFloat = 280
-    private let posterHeight: CGFloat = 390
+    private let posterWidth: CGFloat = 340
+    private let posterHeight: CGFloat = 500
 
     var body: some View {
         VStack(alignment: .leading, spacing: 14) {

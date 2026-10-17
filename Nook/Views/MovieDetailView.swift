@@ -1,9 +1,4 @@
 
-//
-//  MovieDetailView.swift
-//  Nook
-//
-
 import SwiftUI
 import AVKit
 
@@ -12,14 +7,15 @@ struct MovieDetailView: View {
 
     @State private var videoService = VideoPlayerService()
     @State private var isPlayerPresented = false
+    @State private var isResumePromptPresented = false
 
     private let primaryText = Color.white
     private let secondaryText = Color.white.opacity(0.80)
 
     private let sectionSpacing: CGFloat = 28
-    private let recommendationSpacing: CGFloat = 24
-    private let cardWidth: CGFloat = 300
-    private let cardHeight: CGFloat = 420
+    private let recommendationSpacing: CGFloat = 32
+    private let cardWidth: CGFloat = 340
+    private let cardHeight: CGFloat = 500
 
     private var isSnowBear: Bool {
         movie.title == "Snow Bear"
@@ -60,6 +56,30 @@ struct MovieDetailView: View {
             }
         ) {
             playerScreen
+        }
+        .confirmationDialog(
+            "Continue watching Snow Bear?",
+            isPresented: $isResumePromptPresented,
+            titleVisibility: .visible
+        ) {
+            Button("Continue Watching") {
+                videoService.resumeFromSavedPosition {
+                    isPlayerPresented = true
+                }
+            }
+
+            Button("Start from Beginning") {
+                videoService.startFromBeginning()
+                isPlayerPresented = true
+            }
+
+            Button("Cancel", role: .cancel) {
+                // Keep the saved playback position.
+            }
+        } message: {
+            Text(
+                "Would you like to pick up where you left off or watch from the beginning?"
+            )
         }
     }
 
@@ -251,9 +271,7 @@ struct MovieDetailView: View {
         HStack(alignment: .firstTextBaseline, spacing: 18) {
             Text(label)
                 .font(.system(size: 18, weight: .medium))
-                .foregroundStyle(
-                    .white.opacity(0.65)
-                )
+                .foregroundStyle(.white.opacity(0.65))
                 .frame(width: 190, alignment: .leading)
 
             value()
@@ -284,11 +302,13 @@ struct MovieDetailView: View {
                             } label: {
                                 recommendationCard(recommendation)
                             }
-                            .buttonStyle(.card)
+                            .buttonStyle(LiftOnFocusButtonStyle())
+
+
                         }
                     }
-                    .padding(.vertical, 8)
-                    .padding(.trailing, 12)
+                    .padding(.horizontal, 12)
+                    .padding(.vertical, 16)
                 }
                 .scrollIndicators(.hidden)
             }
@@ -304,7 +324,7 @@ struct MovieDetailView: View {
     private func recommendationCard(
         _ recommendation: Movie
     ) -> some View {
-        VStack(alignment: .leading, spacing: 14) {
+        VStack(alignment: .leading, spacing: 16) {
             Image(recommendation.artworkName)
                 .resizable()
                 .scaledToFill()
@@ -324,21 +344,25 @@ struct MovieDetailView: View {
                         )
                 }
 
+
             Text(recommendation.title)
                 .font(.system(size: 23, weight: .semibold))
                 .foregroundStyle(primaryText)
                 .lineLimit(2)
+                .fixedSize(horizontal: false, vertical: true)
                 .multilineTextAlignment(.leading)
                 .frame(
                     width: cardWidth,
                     alignment: .topLeading
                 )
+
         }
         .frame(
             width: cardWidth,
             alignment: .topLeading
         )
         .contentShape(Rectangle())
+        .focusEffectDisabled()
     }
 
     // MARK: - Playback
@@ -373,7 +397,13 @@ struct MovieDetailView: View {
     private func startPlayback() {
         guard movie.isPlayable else { return }
 
-        if videoService.loadVideo(named: "SnowBear") {
+        guard videoService.loadVideo(named: "SnowBear") else {
+            return
+        }
+
+        if videoService.hasSavedProgress {
+            isResumePromptPresented = true
+        } else {
             isPlayerPresented = true
         }
     }
@@ -391,5 +421,31 @@ struct MovieDetailView: View {
                 isPlayable: true
             )
         )
+    }
+}
+private struct NoPlatterButtonStyle: ButtonStyle {
+    func makeBody(configuration: Configuration) -> some View {
+        configuration.label
+    }
+}
+private struct LiftOnFocusButtonStyle: ButtonStyle {
+    func makeBody(configuration: Configuration) -> some View {
+        LiftOnFocusLabel(label: configuration.label)
+    }
+}
+
+private struct LiftOnFocusLabel<Label: View>: View {
+    @Environment(\.isFocused) private var isFocused
+    let label: Label
+
+    var body: some View {
+        label
+            .scaleEffect(isFocused ? 1.05 : 1.0)
+            .shadow(
+                color: .black.opacity(isFocused ? 0.5 : 0),
+                radius: 20,
+                y: 12
+            )
+            .animation(.easeOut(duration: 0.2), value: isFocused)
     }
 }

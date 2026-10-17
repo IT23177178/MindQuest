@@ -331,14 +331,14 @@ struct HomeView: View {
                                 movies: viewModel.movies(for: mood)
                             )
                         } label: {
-                            HStack(spacing: 18) {
+                            HStack(spacing: 20) {
                                 Image(systemName: mood.symbol)
                                     .font(.system(size: 29))
                                     .foregroundStyle(.white)
 
                                 VStack(
                                     alignment: .leading,
-                                    spacing: 8
+                                    spacing: 10
                                 ) {
                                     Text(mood.title)
                                         .font(
@@ -364,7 +364,7 @@ struct HomeView: View {
                             .padding(.horizontal, 22)
                             .padding(.vertical, 25)
                             .frame(
-                                width: 300,
+                                width: 390,
                                 alignment: .leading
                             )
                             .frame(minHeight: 105)
@@ -379,8 +379,6 @@ struct HomeView: View {
             .scrollIndicators(.hidden)
         }
     }
-
-    // MARK: - Movie Rows
 
    
     // MARK: - Movie Rows
@@ -410,7 +408,7 @@ struct HomeView: View {
                             } label: {
                                 MovieCardView(movie: movie)
                             }
-                            .buttonStyle(.card)
+                            .buttonStyle(HomeMovieButtonStyle())
                         }
                     }
                     .padding(.horizontal, 24)
@@ -541,3 +539,5 @@ private final class PlayerView: UIView {
 #Preview {
     HomeView()
 }
+
+
